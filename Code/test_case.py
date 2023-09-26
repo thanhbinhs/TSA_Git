@@ -1,8 +1,19 @@
-import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
-df = pd.read_csv("../Data/Stock/AAPL.csv")
+# Dữ liệu mẫu (ma trận dữ liệu)
+data = np.array([[1, 2, 3],
+                 [4, 5, 6],
+                 [7, 8, 9]])
 
-df = df.replace('\$', '', regex=True)
+# Tạo biểu đồ heatmap
+plt.imshow(data, cmap='viridis', interpolation='nearest')
 
+# Đặt tiêu đề và tên trục
+plt.title('Heatmap Example')
+plt.xlabel('X-Axis')
+plt.ylabel('Y-Axis')
 
-df.to_csv("../Data/Stock/AAPL.csv", index=False)
+# Hiển thị biểu đồ
+plt.colorbar()  # Thêm thanh màu để hiển thị giá trị tương ứng với màu
+plt.show()
