@@ -1,40 +1,34 @@
-import pandas as pd
+from vnstock import *
 import matplotlib.pyplot as plt
-from datetime import datetime
+import pandas as pd
+from matplotlib.dates import DateFormatter, AutoDateLocator
 
-# Sample data with a date column
-data = {'date': ['2023-09-01', '2023-09-02', '2023-09-03', '2023-09-04'],
-        'value': [10, 15, 12, 18]}
+fpt = stock_historical_data("FPT", "2013-01-01", "2023-09-29", "1D", 'stock')
+vic = stock_historical_data("VIC", "2013-01-01", "2023-09-29", "1D", 'stock')
 
-# Create a DataFrame from the sample data
-df = pd.DataFrame(data)
+fpt['time'] = pd.to_datetime(fpt['time'])
 
-# Convert the 'date' column to a datetime object
-df['date'] = pd.to_datetime(df['date'])
 
-# Create a plot
-fig, ax = plt.subplots(figsize=(10, 5))
+fpt['open'] = fpt['open'].astype(float)
+vic['open'] = vic['open'].astype(float)
 
-# Plot the data
-ax.plot(df['date'], df['value'], marker='o', linestyle='-')
+fig,ax1 = plt.subplots(figsize=(12,6))
+plot1 = ax1.plot(fpt['time'], fpt['open'], color='red', label='FPT')
+ax1.set_xlabel('Date')
+ax1.set_ylabel('Price Open FPT')
+ax1.legend(loc='upper left')
 
-# Customize the x-axis date format
-ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%Y/%m/%d'))
+ax2 = plt.subplot()
+plot2 = ax2.plot(fpt['time'], vic['open'], color='blue', label='VIC')
+ax2.set_ylabel('Price Open VIC')
+ax2.legend(loc='upper right')
 
-# Optionally, rotate the x-axis labels to avoid overlapping
-plt.xticks(rotation=45)
+ax1.grid(True, linestyle='--', alpha=0.6)
 
-# Set labels for x and y axes
-ax.set_xlabel('Date')
-ax.set_ylabel('Value')
 
-# Draw vertical and horizontal reference lines (x=0 and y=0)
-ax.axvline(x=datetime(2023, 9, 1), color='red', linestyle='--', label='x=0 (Oy)')
-ax.axhline(y=0, color='blue', linestyle='--', label='y=0 (Ox)')
+ax1.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+for label in ax1.get_xticklabels():
+    label.set_rotation(45)
 
-# Add a legend to the plot
-ax.legend()
-
-# Display the plot
 plt.tight_layout()
 plt.show()
